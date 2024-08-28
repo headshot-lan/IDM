@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use NumberToWords\NumberToWords;
@@ -39,6 +41,9 @@ class UserFixtures extends Fixture
             $user->setPersonalDataConfirmed(1 != ($i + 2) % 3);
             $user->setIsSuperadmin(false);
             $user->setGender(1 == $i % 3 ? 'f' : 'm');
+            if ($i < 10){
+                $user->setBirthdate((new DateTimeImmutable("midnight"))->sub(DateInterval::createFromDateString(($i+10).' years')));
+            }
             $this->addReference('user-'.$i, $user);
             $manager->persist($user);
         }
